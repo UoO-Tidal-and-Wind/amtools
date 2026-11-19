@@ -2,14 +2,16 @@
 Reader for files written under an OpenFOAM ``turbineOutput`` directory.
 """
 
-from typing import Union, Sequence
 import logging
 from pathlib import Path
+from typing import Sequence, Union
+
 import numpy as np
 
 # Configure logging
-logging.basicConfig(level=logging.WARNING,
-                    format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    level=logging.WARNING, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
 
 class TurbineOutputFile:
@@ -57,9 +59,9 @@ class TurbineOutputFile:
             ValueError: If the file contains no data rows.
             KeyError: If required metadata columns are missing.
         """
-        with open(self.path, 'r', encoding='utf-8') as f:
+        with open(self.path, "r", encoding="utf-8") as f:
             header_line = f.readline().strip().lstrip("#").strip()
-            headers = header_line.split('    ')
+            headers = header_line.split("    ")
             rows = np.loadtxt(f, comments="#", ndmin=2)
         if rows.size == 0:
             logging.warning("No data found in '%s'.", self.path)
@@ -68,8 +70,8 @@ class TurbineOutputFile:
         number_of_headers = len(headers)
         # The final header names the measured output columns; metadata precedes it.
         metadata_headers = headers[:-1]
-        data_arr = rows[:, number_of_headers - 1:]
-        metadata = rows[:, :number_of_headers - 1]
+        data_arr = rows[:, number_of_headers - 1 :]
+        metadata = rows[:, : number_of_headers - 1]
         header_indices = {name: index for index, name in enumerate(metadata_headers)}
 
         try:
@@ -101,7 +103,7 @@ class TurbineOutputFile:
             logging.error("File '%s' not found.", self.path)
             raise FileNotFoundError(f"The file '{file_path}' does not exist.")
 
-    def crop_time(self, lower_limit: float = -1E-10, upper_limit: float = 1E10):
+    def crop_time(self, lower_limit: float = -1e-10, upper_limit: float = 1e10):
         """
         Crop turbine output rows to an open time interval in-place.
 
@@ -146,7 +148,9 @@ class TurbineOutputFile:
         self.blade = self.blade[mask]
         self.turbine = self.turbine[mask]
 
-    def get_using_blade_index(self, blade_index: Union[int, Sequence[int]]) -> np.ndarray:
+    def get_using_blade_index(
+        self, blade_index: Union[int, Sequence[int]]
+    ) -> np.ndarray:
         """
         Return data rows for one or more blade indices.
 

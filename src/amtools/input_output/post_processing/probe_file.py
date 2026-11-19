@@ -7,11 +7,13 @@ and gzip-compressed files are supported.
 """
 
 from __future__ import annotations
+
 import gzip
-from typing import Union, Sequence
 import logging
-from pathlib import Path
 import re
+from pathlib import Path
+from typing import Sequence, Union
+
 import numpy as np
 
 # Configure logging
@@ -81,15 +83,14 @@ class ProbeFile:
         if not Path(self.path).exists():
             logging.error("File '%s' not found.", self.path)
             raise FileNotFoundError(f"The file '{self.path}' does not exist.")
-        #probe_pattern = re.compile(
+        # probe_pattern = re.compile(
         #    r"# Probe (\d+) \((-?\d+(?:\.\d+)?) (-?\d+(?:\.\d+)?) (-?\d+(?:\.\d+)?)\)"
-        #)
+        # )
 
         float_pattern = r"[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?"
         probe_pattern = re.compile(
             rf"# Probe (\d+) \(({float_pattern}) ({float_pattern}) ({float_pattern})\)"
         )
-
 
         probe_indices = []
         x_coords = []
@@ -152,11 +153,14 @@ class ProbeFile:
 
             # Apply regex to split by 16 spaces for each line
             # data = np.array([re.split(r" {16}", line.strip()) for line in data_lines])
-            data = np.array([
-                [m.group(1), *re.findall(r"\([^()]*\)", m.group(2))]
-                for line in data_lines
-                if (m := pattern.search(line))
-            ], dtype=object)
+            data = np.array(
+                [
+                    [m.group(1), *re.findall(r"\([^()]*\)", m.group(2))]
+                    for line in data_lines
+                    if (m := pattern.search(line))
+                ],
+                dtype=object,
+            )
         else:
             raise ValueError("Could not infer file_type")
 
@@ -275,7 +279,6 @@ class ProbeFile:
             component_index = [component_index]
 
         self.data = self.data[:, :, component_index]
-
 
     def find_nearest_probe(
         self,
@@ -440,7 +443,6 @@ class ProbeFile:
         self.z = np.append(self.z, other.z)
         self.data = np.concatenate((self.data, other.data), axis=1)
 
-
     @staticmethod
     def _format_number(value) -> str:
         """Format a numeric value without sacrificing floating-point precision."""
@@ -471,7 +473,9 @@ class ProbeFile:
         if self.data.shape[0] != len(self.time):
             raise ValueError("data and time must have the same number of rows.")
         if self.data.shape[1] != len(self.x):
-            raise ValueError("data and coordinates must have the same number of probes.")
+            raise ValueError(
+                "data and coordinates must have the same number of probes."
+            )
         if self.data.shape[1] == 0 or (self.data.ndim == 3 and self.data.shape[2] == 0):
             raise ValueError("data must contain at least one probe value.")
 
@@ -496,7 +500,9 @@ class ProbeFile:
         target_path.parent.mkdir(parents=True, exist_ok=True)
         open_file = gzip.open if target_path.suffix == ".gz" else open
         with open_file(target_path, "wt", encoding="utf-8") as file:
-            for index, (x_value, y_value, z_value) in enumerate(zip(self.x, self.y, self.z)):
+            for index, (x_value, y_value, z_value) in enumerate(
+                zip(self.x, self.y, self.z)
+            ):
                 coordinates = " ".join(
                     self._format_number(value) for value in (x_value, y_value, z_value)
                 )
@@ -510,7 +516,9 @@ class ProbeFile:
                     row.extend(self._format_number(value) for value in values)
                 else:
                     row.extend(
-                        "(" + " ".join(self._format_number(value) for value in probe) + ")"
+                        "("
+                        + " ".join(self._format_number(value) for value in probe)
+                        + ")"
                         for probe in values
                     )
                 file.write(" ".join(row) + "\n")

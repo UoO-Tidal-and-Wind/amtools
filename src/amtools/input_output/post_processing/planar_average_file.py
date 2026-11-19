@@ -9,11 +9,10 @@ from __future__ import annotations
 
 import gzip
 import logging
-from pathlib import Path
 import re
+from pathlib import Path
 
 import numpy as np
-
 
 logging.basicConfig(
     level=logging.WARNING, format="%(asctime)s - %(levelname)s - %(message)s"

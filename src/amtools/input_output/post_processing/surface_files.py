@@ -7,8 +7,9 @@ import shutil
 import tempfile
 from pathlib import Path
 
-import pyvista as pv
 import numpy as np
+import pyvista as pv
+
 
 class SurfaceFiles:
     """
@@ -23,6 +24,7 @@ class SurfaceFiles:
         times_names: Time directory names as strings.
         times_floats: Time directory names converted to floats.
     """
+
     def __init__(self, surfaces_data_dir):
         """
         Initialize the surface-file helper.
@@ -33,14 +35,13 @@ class SurfaceFiles:
         """
         self.data_dir = surfaces_data_dir
 
-
         self.times_paths = [
-            p for p in self.data_dir.glob("*")
+            p
+            for p in self.data_dir.glob("*")
             if p.name.replace(".", "", 1).isdigit()  # allow numbers like 0.001
         ]
         self.times_names = np.array([path.name for path in self.times_paths])
         self.times_floats = np.array([float(name) for name in self.times_names])
-
 
     def read_file(self, time: float, name: str) -> pv.DataObject:
         """
@@ -58,7 +59,9 @@ class SurfaceFiles:
             FileNotFoundError: If neither the named file nor its ``.gz`` version exists.
         """
         if time not in self.times_floats:
-            raise ValueError(f"Time {time} not found in available times: {self.times_floats}")
+            raise ValueError(
+                f"Time {time} not found in available times: {self.times_floats}"
+            )
 
         time_index = np.where(self.times_floats == time)[0][0]
         file_path = self.times_paths[time_index]
@@ -68,8 +71,7 @@ class SurfaceFiles:
             return pv.read(surface_path)
 
         compressed_path = (
-            surface_path if surface_path.suffix == ".gz"
-            else Path(f"{surface_path}.gz")
+            surface_path if surface_path.suffix == ".gz" else Path(f"{surface_path}.gz")
         )
         if not compressed_path.exists():
             raise FileNotFoundError(

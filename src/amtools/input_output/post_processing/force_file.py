@@ -4,7 +4,9 @@ Reader for OpenFOAM ``force.dat`` post-processing output.
 
 import logging
 from pathlib import Path
+
 import numpy as np
+
 
 class ForceFile:
     """
@@ -18,6 +20,7 @@ class ForceFile:
         pressure: Placeholder attribute initialized for pressure-force data.
         viscous: Columns six to eight after :meth:`split_data`.
     """
+
     def __init__(self, file_path: str):
         """
         Initialize a force-file reader and validate the path.
@@ -66,8 +69,8 @@ class ForceFile:
 
         # assumes order of data is total, pressure, viscous
         data = np.genfromtxt(self.path, comments="#")
-        self.time = data[:,0]
-        self.data = data[:,1:]
+        self.time = data[:, 0]
+        self.data = data[:, 1:]
         self.split_data()
 
     def split_data(self):

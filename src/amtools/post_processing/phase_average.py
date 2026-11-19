@@ -215,11 +215,8 @@ def phase_average_field(
             np.diagonal(phase_averaged_covariance, axis1=1, axis2=2)
         )
     else:
-        phase_result.phase_averaged_std = np.sqrt(
-		    phase_averaged_covariance
-		)
+        phase_result.phase_averaged_std = np.sqrt(phase_averaged_covariance)
 
     phase_result.bin_counts = np.array([len(arr) for arr in binned_y_arr])
 
     return phase_result
-

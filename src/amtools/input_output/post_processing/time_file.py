@@ -4,6 +4,7 @@ Reader for OpenFOAM ``timeInfo.dat`` post-processing output.
 
 import logging
 from pathlib import Path
+
 import numpy as np
 
 
@@ -22,6 +23,7 @@ class TimeFile:
         cpu_time_per_step: Per-step CPU time when present.
         clock_time_per_step: Per-step wall-clock time when present.
     """
+
     def __init__(self, file_path: str):
         """
         Initialize a time-info reader and validate the path.
