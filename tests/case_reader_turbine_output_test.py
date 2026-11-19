@@ -32,7 +32,9 @@ def test_turbine_output_data_and_metadata():
 def test_turbine_output_with_blade_metadata():
     output = CaseReader(EXAMPLE_CASE_PATH).turbine_output("axialForce", "first")
 
-    np.testing.assert_array_equal(output.time, [0.1, 0.1, 0.1, 0.2, 0.2, 0.2, 0.3, 0.3, 0.3])
+    np.testing.assert_array_equal(
+        output.time, [0.1, 0.1, 0.1, 0.2, 0.2, 0.2, 0.3, 0.3, 0.3]
+    )
     np.testing.assert_array_equal(output.blade, [0, 1, 2] * 3)
     np.testing.assert_array_equal(output.data, EXAMPLE_AXIAL_FORCE_DATA)
 
@@ -67,4 +69,3 @@ def test_crop_turbine_output_by_time_and_blade():
     output.crop_blade(2)
     np.testing.assert_array_equal(output.time, [0.2])
     np.testing.assert_array_equal(output.data, [[-20.0, -40.0, -60.0]])
-
