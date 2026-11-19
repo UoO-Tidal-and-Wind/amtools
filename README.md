@@ -1,4 +1,5 @@
 # amtools
+[![lint-format](https://github.com/UoO-Tidal-and-Wind/amtools/actions/workflows/CI-lint.yml/badge.svg)](https://github.com/UoO-Tidal-and-Wind/amtools/actions/workflows/CI-lint.yml) [![CI (pytest)](https://github.com/UoO-Tidal-and-Wind/amtools/actions/workflows/CI-pytest.yml/badge.svg)](https://github.com/UoO-Tidal-and-Wind/amtools/actions/workflows/CI-pytest.yml)
 
 `amtools` is a Python package for working with actuator-method simulation output. It includes readers for OpenFOAM case data and utilities for phase averaging.
 
