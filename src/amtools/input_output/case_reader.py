@@ -338,7 +338,7 @@ class CaseReader:
                 raise ValueError(
                     "time_dir_value must be provided when using 'closest to'."
                 )
-            time_dirs_float = [float(f) for f in time_dirs]
+            time_dirs_float = np.array([float(f) for f in time_dirs])
             index = np.argmin(np.abs(time_dirs_float - float(time_dir_value)))
             self.turbine_output_time_dir = time_dirs[index]
 
