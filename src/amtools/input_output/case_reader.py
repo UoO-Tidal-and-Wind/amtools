@@ -18,15 +18,16 @@ Example:
 
 from pathlib import Path
 from typing import Literal
+
 import numpy as np
 
-from .turbine_output.turbine_output_file import TurbineOutputFile
-from .post_processing.probe_file import ProbeFile
-from .post_processing.surface_files import SurfaceFiles
 from .post_processing.force_file import ForceFile
-from .post_processing.time_file import TimeFile
 from .post_processing.phase_probe_file import PhaseProbeFile
 from .post_processing.planar_average_file import PlanarAverageFile
+from .post_processing.probe_file import ProbeFile
+from .post_processing.surface_files import SurfaceFiles
+from .post_processing.time_file import TimeFile
+from .turbine_output.turbine_output_file import TurbineOutputFile
 from .wake_finder.sheared_wake_finder_file import ShearedWakeFinderFile
 
 
@@ -108,11 +109,15 @@ class CaseReader:
             selected_time_dir = time_dirs[-1]
         elif time_dir == "exactly":
             if not time_dir_value:
-                raise ValueError("time_dir_value must be provided when using 'exactly'.")
+                raise ValueError(
+                    "time_dir_value must be provided when using 'exactly'."
+                )
             selected_time_dir = time_dir_value
         elif time_dir == "closest to":
             if not time_dir_value:
-                raise ValueError("time_dir_value must be provided when using 'closest to'.")
+                raise ValueError(
+                    "time_dir_value must be provided when using 'closest to'."
+                )
             selected_time_dir = min(
                 time_dirs, key=lambda item: abs(float(item) - float(time_dir_value))
             )
@@ -338,7 +343,10 @@ class CaseReader:
             self.turbine_output_time_dir = time_dirs[index]
 
         file_path = probe_path / self.turbine_output_time_dir / variable_name
-        if not file_path.exists() and file_path.with_name(f"{file_path.name}.gz").exists():
+        if (
+            not file_path.exists()
+            and file_path.with_name(f"{file_path.name}.gz").exists()
+        ):
             file_path = file_path.with_name(f"{file_path.name}.gz")
 
         if not file_path.exists():
@@ -361,10 +369,13 @@ class CaseReader:
 
                 for new_time_dir in time_dirs_to_combine:
                     new_file_path = probe_path / new_time_dir / variable_name
-                    if not new_file_path.exists() and new_file_path.with_name(
-                        f"{new_file_path.name}.gz"
-                    ).exists():
-                        new_file_path = new_file_path.with_name(f"{new_file_path.name}.gz")
+                    if (
+                        not new_file_path.exists()
+                        and new_file_path.with_name(f"{new_file_path.name}.gz").exists()
+                    ):
+                        new_file_path = new_file_path.with_name(
+                            f"{new_file_path.name}.gz"
+                        )
                     new_file_reader = ProbeFile(new_file_path)
                     new_file_reader.include_out_bounds = include_out_of_bounds
                     new_file_reader.read()
@@ -455,7 +466,10 @@ class CaseReader:
             self.turbine_output_time_dir = time_dirs[index]
 
         file_path = probe_path / self.turbine_output_time_dir / variable_name
-        if not file_path.exists() and file_path.with_name(f"{file_path.name}.gz").exists():
+        if (
+            not file_path.exists()
+            and file_path.with_name(f"{file_path.name}.gz").exists()
+        ):
             file_path = file_path.with_name(f"{file_path.name}.gz")
 
         if not file_path.exists():
@@ -477,10 +491,13 @@ class CaseReader:
 
                 for new_time_dir in time_dirs_to_combine:
                     new_file_path = probe_path / new_time_dir / variable_name
-                    if not new_file_path.exists() and new_file_path.with_name(
-                        f"{new_file_path.name}.gz"
-                    ).exists():
-                        new_file_path = new_file_path.with_name(f"{new_file_path.name}.gz")
+                    if (
+                        not new_file_path.exists()
+                        and new_file_path.with_name(f"{new_file_path.name}.gz").exists()
+                    ):
+                        new_file_path = new_file_path.with_name(
+                            f"{new_file_path.name}.gz"
+                        )
                     new_file_reader = PhaseProbeFile(new_file_path)
                     new_file_reader.read()
 
@@ -496,7 +513,7 @@ class CaseReader:
                         (file_reader.time, new_file_reader.time)
                     )
                     file_reader.bin = np.concatenate(
-                            (file_reader.bin, new_file_reader.bin)
+                        (file_reader.bin, new_file_reader.bin)
                     )
                     # file_reader.x = np.concatenate((file_reader.x, new_file_reader.x))
                     # file_reader.y = np.concatenate((file_reader.y, new_file_reader.y))
@@ -544,9 +561,7 @@ class CaseReader:
         planar_average_path = self.post_processing_path / planar_average_name
 
         if not planar_average_path.exists():
-            raise FileNotFoundError(
-                f"The path {planar_average_path} does not exist."
-            )
+            raise FileNotFoundError(f"The path {planar_average_path} does not exist.")
 
         combine_files = False
         if time_dir == "combined":
@@ -564,9 +579,7 @@ class CaseReader:
             self.turbine_output_time_dir = time_dirs[index]
         elif time_dir == "exactly":
             if not time_dir_value:
-                raise ValueError(
-                    "time_dir_value must be provided when using exactly."
-                )
+                raise ValueError("time_dir_value must be provided when using exactly.")
             self.turbine_output_time_dir = time_dir_value
         elif time_dir == "closest to":
             if not time_dir_value:
@@ -580,7 +593,10 @@ class CaseReader:
             raise ValueError(f"Unknown time_dir selection {time_dir}.")
 
         file_path = planar_average_path / self.turbine_output_time_dir / variable_name
-        if not file_path.exists() and file_path.with_name(f"{file_path.name}.gz").exists():
+        if (
+            not file_path.exists()
+            and file_path.with_name(f"{file_path.name}.gz").exists()
+        ):
             file_path = file_path.with_name(f"{file_path.name}.gz")
 
         if not file_path.exists():
@@ -594,6 +610,7 @@ class CaseReader:
             time_dirs_to_combine.remove(self.turbine_output_time_dir)
 
             if len(time_dirs_to_combine) != 0:
+
                 def convert_to_float(item):
                     return float(item)
 
@@ -601,9 +618,10 @@ class CaseReader:
 
                 for new_time_dir in time_dirs_to_combine:
                     new_file_path = planar_average_path / new_time_dir / variable_name
-                    if not new_file_path.exists() and new_file_path.with_name(
-                        f"{new_file_path.name}.gz"
-                    ).exists():
+                    if (
+                        not new_file_path.exists()
+                        and new_file_path.with_name(f"{new_file_path.name}.gz").exists()
+                    ):
                         new_file_path = new_file_path.with_name(
                             f"{new_file_path.name}.gz"
                         )
@@ -769,7 +787,6 @@ class CaseReader:
 
                     file_reader.split_data()
 
-
         return file_reader
 
     def time(
@@ -874,6 +891,5 @@ class CaseReader:
                     )
 
                     file_reader.split_data()
-
 
         return file_reader

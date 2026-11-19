@@ -62,7 +62,6 @@ class ShearedWakeFinderFile:
         self.sigma_z = self.sigma_z[mask]
         self.r_equiv = self.r_equiv[mask]
 
-
     def get_data_at_nearest_time(
         self, target_time: float
     ) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:

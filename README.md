@@ -16,9 +16,9 @@ case = CaseReader("/path/to/case")
 probe_data = case.probe("probes", "U", time_dir="combined")
 
 # probe data is stored in handy np arrays
-vel = probe_data.data # the sampled data
-time = probe_data.time # the time of the samples
-z = probe_data.z # the z position of the probes
+vel = probe_data.data  # the sampled data
+time = probe_data.time  # the time of the samples
+z = probe_data.z  # the z position of the probes
 
 # some other useful utilities...
 # Keep samples between 10 and 20 seconds, then order probes by height.
@@ -36,7 +36,6 @@ mean_by_probe = probe_data.data.mean(axis=0)
 thrust_data = case.turbine_output("thrust", time_dir="combined")
 thrust_time = thrust_data.time
 thrust_values = thrust_data.data
-
 ```
 
 ## Installation

@@ -3,17 +3,21 @@ Reader and writer support for OpenFOAM phase-probe output files.
 """
 
 from __future__ import annotations
+
 import gzip
 import logging
-from pathlib import Path
 import re
+from pathlib import Path
+
 import numpy as np
+
 from .probe_file import ProbeFile
 
 # Configure logging
 logging.basicConfig(
     level=logging.WARNING, format="%(asctime)s - %(levelname)s - %(message)s"
 )
+
 
 class PhaseProbeFile(ProbeFile):
     """
@@ -26,6 +30,7 @@ class PhaseProbeFile(ProbeFile):
         bin: One-dimensional integer array of phase-bin indices.
         total_time: One-dimensional array containing accumulated time per phase-bin sample.
     """
+
     # Adds phase metadata to ProbeFile's time, data, and coordinate arrays.
     # pylint: disable=too-many-instance-attributes
     def __init__(self, file_path: str):
@@ -59,15 +64,14 @@ class PhaseProbeFile(ProbeFile):
         if not Path(self.path).exists():
             logging.error("File '%s' not found.", self.path)
             raise FileNotFoundError(f"The file '{self.path}' does not exist.")
-        #probe_pattern = re.compile(
+        # probe_pattern = re.compile(
         #    r"# Probe (\d+) \((-?\d+(?:\.\d+)?) (-?\d+(?:\.\d+)?) (-?\d+(?:\.\d+)?)\)"
-        #)
+        # )
 
         float_pattern = r"[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?"
         probe_pattern = re.compile(
             rf"# PhaseProbe (\d+) \(({float_pattern}) ({float_pattern}) ({float_pattern})\)"
         )
-
 
         probe_indices = []
         x_coords = []
@@ -106,7 +110,7 @@ class PhaseProbeFile(ProbeFile):
         self.z = np.array(z_coords, dtype=np.float64)
 
         pattern = re.compile(
-    r"""
+            r"""
     ^\s*
     ([+-]?\d+(?:\.\d+)?)      # time (float)
     \s+
@@ -115,9 +119,8 @@ class PhaseProbeFile(ProbeFile):
     ([+-]?\d+(?:\.\d+)?)      # totalTime
     (.*)$                     # rest of the line
     """,
-    re.VERBOSE,
-)
-
+            re.VERBOSE,
+        )
 
         data = np.array([])
         # Use regular expressions to split the data lines
@@ -130,11 +133,19 @@ class PhaseProbeFile(ProbeFile):
                 data_lines = [line for line in file if not line.startswith("#")]
 
             # Apply regex to split by 16 spaces for each line
-            data = np.array([
-                [m.group(1), m.group(2), m.group(3), *re.findall(r"\([^()]*\)", m.group(4))]
-                for line in data_lines
-                if (m := pattern.search(line))
-            ], dtype=object)
+            data = np.array(
+                [
+                    [
+                        m.group(1),
+                        m.group(2),
+                        m.group(3),
+                        *re.findall(r"\([^()]*\)", m.group(4)),
+                    ]
+                    for line in data_lines
+                    if (m := pattern.search(line))
+                ],
+                dtype=object,
+            )
         else:
             raise ValueError("Could not infer file_type")
 
@@ -152,9 +163,6 @@ class PhaseProbeFile(ProbeFile):
                     for row in self.data
                 ]
             )
-
-
-
 
     def _probe_header_label(self) -> str:
         return "PhaseProbe"
