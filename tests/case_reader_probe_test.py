@@ -5,31 +5,32 @@ import numpy as np
 from amtools.input_output import CaseReader
 from amtools.input_output.post_processing.probe_file import ProbeFile
 
-EXAMPLE_CASE_PATH = Path(__file__).parent / "data" / "example_case" 
+EXAMPLE_CASE_PATH = Path(__file__).parent / "data" / "example_case"
 
 EXAMPLE_U_DATA = [
-            [
-                [1.0, 0.0, -1.0],
-                [2.0, 0.0, -2.0],
-                [3.0, 0.0, -3.0],
-            ],
-            [
-                [2.0, 0.0, -2.0],
-                [4.0, 0.0, -4.0],
-                [6.0, 0.0, -6.0],
-            ],
-            [
-                [3.0, 0.0, -3.0],
-                [6.0, 0.0, -6.0],
-                [9.0, 0.0, -9.0],
-            ],
-        ]
+    [
+        [1.0, 0.0, -1.0],
+        [2.0, 0.0, -2.0],
+        [3.0, 0.0, -3.0],
+    ],
+    [
+        [2.0, 0.0, -2.0],
+        [4.0, 0.0, -4.0],
+        [6.0, 0.0, -6.0],
+    ],
+    [
+        [3.0, 0.0, -3.0],
+        [6.0, 0.0, -6.0],
+        [9.0, 0.0, -9.0],
+    ],
+]
 
 EXAMPLE_P_DATA = [
     [1.0, 0.0, -1.0],
     [2.0, 0.0, -2.0],
     [3.0, 0.0, -3.0],
 ]
+
 
 def test_probe_file_position():
     case = CaseReader(EXAMPLE_CASE_PATH)
@@ -38,18 +39,17 @@ def test_probe_file_position():
     np.testing.assert_array_equal(probe_data.y, [2.0, 5.0, 8.0])
     np.testing.assert_array_equal(probe_data.z, [3.0, 6.0, 9.0])
 
+
 def test_probe_file_time():
     case = CaseReader(EXAMPLE_CASE_PATH)
     probe_data = case.probe("example_probes", "U", "first")
     np.testing.assert_array_equal(probe_data.time, [0.1, 0.2, 0.3])
 
+
 def test_probe_file_data():
     case = CaseReader(EXAMPLE_CASE_PATH)
     probe_data = case.probe("example_probes", "U", "first")
-    np.testing.assert_array_equal(
-        probe_data.data,
-        EXAMPLE_U_DATA
-    )
+    np.testing.assert_array_equal(probe_data.data, EXAMPLE_U_DATA)
 
 
 def test_scalar_probe_file_data():
@@ -58,13 +58,12 @@ def test_scalar_probe_file_data():
     np.testing.assert_array_equal(probe_data.time, [0.1, 0.2, 0.3])
     np.testing.assert_array_equal(probe_data.data, EXAMPLE_P_DATA)
 
+
 def test_compressed_probe_file_data():
     case = CaseReader(EXAMPLE_CASE_PATH)
     probe_data = case.probe("example_probes", "U_compressed", "first")
-    np.testing.assert_array_equal(
-        probe_data.data,
-        EXAMPLE_U_DATA
-    )
+    np.testing.assert_array_equal(probe_data.data, EXAMPLE_U_DATA)
+
 
 def test_combined_probe_read():
     case = CaseReader(EXAMPLE_CASE_PATH)
@@ -84,6 +83,7 @@ def test_probe_time_directory_selection():
     np.testing.assert_array_equal(latest.time, [0.3, 0.4, 0.5])
     np.testing.assert_array_equal(exact.time, first.time)
     np.testing.assert_array_equal(closest.time, first.time)
+
 
 def test_crop_time():
     case = CaseReader(EXAMPLE_CASE_PATH)
@@ -122,9 +122,11 @@ def test_crop_vector_probe_components():
 
     np.testing.assert_array_equal(
         probe_data.data,
-        [[[1.0, -1.0], [2.0, -2.0], [3.0, -3.0]],
-         [[2.0, -2.0], [4.0, -4.0], [6.0, -6.0]],
-         [[3.0, -3.0], [6.0, -6.0], [9.0, -9.0]]],
+        [
+            [[1.0, -1.0], [2.0, -2.0], [3.0, -3.0]],
+            [[2.0, -2.0], [4.0, -4.0], [6.0, -6.0]],
+            [[3.0, -3.0], [6.0, -6.0], [9.0, -9.0]],
+        ],
     )
 
 
