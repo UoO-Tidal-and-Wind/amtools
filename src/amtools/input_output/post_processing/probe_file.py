@@ -260,7 +260,10 @@ class ProbeFile:
             upper_limit: Upper time bound.
             inclusive: use inclusive bounds instead. Defaults to False.
         """
-        mask = (self.time > lower_limit) & (self.time < upper_limit)
+        if inclusive:
+            mask = (self.time >= lower_limit) & (self.time <= upper_limit)
+        else:
+            mask = (self.time > lower_limit) & (self.time < upper_limit)
 
         self.data = self.data[mask]
         self.time = self.time[mask]
