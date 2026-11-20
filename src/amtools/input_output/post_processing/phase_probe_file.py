@@ -167,6 +167,13 @@ class PhaseProbeFile(ProbeFile):
     def _probe_header_label(self) -> str:
         return "PhaseProbe"
 
+    def copy(self) -> PhaseProbeFile:
+        """Return a deep copy, including phase metadata."""
+        duplicate = super().copy()
+        # Keep the legacy alias tied to the copied canonical array.
+        duplicate.totalTime = duplicate.total_time  # pylint: disable=invalid-name
+        return duplicate
+
     def _validate_for_write(self) -> None:
         super()._validate_for_write()
         self.bin = np.asarray(self.bin)

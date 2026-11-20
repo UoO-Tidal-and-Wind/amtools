@@ -159,3 +159,14 @@ def test_scalar_probe_write_read_round_trip(tmp_path):
     np.testing.assert_array_equal(reread.x, original.x)
     np.testing.assert_array_equal(reread.y, original.y)
     np.testing.assert_array_equal(reread.z, original.z)
+
+
+def test_probe_copy():
+    original = CaseReader(EXAMPLE_CASE_PATH).probe("example_probes", "U", "first")
+    copy = original.copy()
+
+    np.testing.assert_array_equal(copy.time, original.time)
+    np.testing.assert_array_equal(copy.data, original.data)
+    np.testing.assert_array_equal(copy.x, original.x)
+    np.testing.assert_array_equal(copy.y, original.y)
+    np.testing.assert_array_equal(copy.z, original.z)

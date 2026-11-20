@@ -8,6 +8,7 @@ and gzip-compressed files are supported.
 
 from __future__ import annotations
 
+import copy
 import gzip
 import logging
 import re
@@ -67,6 +68,10 @@ class ProbeFile:
             file_path: New path to use for subsequent reads or writes.
         """
         self.path = file_path
+
+    def copy(self) -> ProbeFile:
+        """Return a deep copy of this probe file and all its member data."""
+        return copy.deepcopy(self)
 
     def read(self):
         """
