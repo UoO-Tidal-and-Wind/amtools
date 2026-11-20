@@ -53,6 +53,13 @@ The package requires Python 3.10 or later. To install the development dependenci
 pip install '.[dev]'
 ```
 
+To ensure the examples you will need to ensure some additional optional dependencies are installed (i.e. matplotlib):
+
+
+```bash
+pip install '.[examples]'
+```
+
 ## License
 
 The project metadata specifies the MIT License. See `LICENSE` for the license terms.

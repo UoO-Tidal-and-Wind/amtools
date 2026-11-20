@@ -27,6 +27,11 @@ dev = [
     "ruff",
 ]
 
+examples = [
+	"matplotlib",
+	"ipykernel",
+]
+
 [project.urls]
 Homepage = "https://github.com/UoO-Tidal-and-Wind/Actuator-Method-Tools"
 Issues = "https://github.com/UoO-Tidal-and-Wind/Actuator-Method-Tools/issues"
