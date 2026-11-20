@@ -170,4 +170,3 @@ def test_probe_copy():
     np.testing.assert_array_equal(copy.x, original.x)
     np.testing.assert_array_equal(copy.y, original.y)
     np.testing.assert_array_equal(copy.z, original.z)
-
