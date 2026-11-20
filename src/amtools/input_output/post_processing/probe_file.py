@@ -244,7 +244,12 @@ class ProbeFile:
         self.y = self.y[keep]
         self.z = self.z[keep]
 
-    def crop_by_time(self, lower_limit: float = -1e10, upper_limit: float = 1e10):
+    def crop_by_time(
+        self,
+        lower_limit: float = -1e10,
+        upper_limit: float = 1e10,
+        inclusive: bool = False,
+    ):
         """
         Crop probe values to an open time interval in-place.
 
@@ -253,6 +258,7 @@ class ProbeFile:
         Args:
             lower_limit: Lower time bound.
             upper_limit: Upper time bound.
+            inclusive: use inclusive bounds instead. Defaults to False.
         """
         mask = (self.time > lower_limit) & (self.time < upper_limit)
 
