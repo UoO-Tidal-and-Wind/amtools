@@ -254,7 +254,7 @@ class ProbeFile:
             lower_limit: Lower time bound.
             upper_limit: Upper time bound.
         """
-        mask = (self.time > lower_limit) & (self.time < upper_limit)
+        mask = (self.time >= lower_limit) & (self.time <= upper_limit)
 
         self.data = self.data[mask]
         self.time = self.time[mask]
